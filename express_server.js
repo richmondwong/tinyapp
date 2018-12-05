@@ -12,10 +12,6 @@ var urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-// app.get(`/${generateRandomString()}`,(req, res) => {
-//     return res.redirect(301, 'http://www.google.com' + req.originalURL)
-//   })
-
 app.get('/urls/new', (req, res) => {
   res.render('urls_new');
 });
@@ -45,9 +41,15 @@ app.get('/hello', (req, res) => {
   res.send('<html><body>Hello <b>World</b></body></html>\n')
 })
 
+app.get('/u/:shortURL', (req, res) => {
+  // console.log("REQ PARAMS:", req.params.shortURL)
+  // console.log(urlDatabase)
+  var shortURL = req.params.shortURL;
+  res.redirect(urlDatabase[shortURL]);
+})
+
 app.post('/urls', (req, res) => {
   console.log(req.body);
-  // res.send('Ok');
   var randomValue = generateRandomString();
   urlDatabase[randomValue] = req.body["longURL"]
   res.redirect(`/urls/${randomValue}`)
@@ -56,16 +58,11 @@ app.post('/urls', (req, res) => {
 function generateRandomString() {
   var allValues = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   var randomValue = ""
-  console.log(allValues.length)
-
   for (var i = 6; i > 0; i--){
     var numberPicker = Math.floor(Math.random() * allValues.length)
     var selectedValue = allValues.substring(numberPicker, numberPicker + 1).toString()
-    console.log(selectedValue)
     randomValue += selectedValue
-    // console.log(selectedValue)
   }
-
   return randomValue
 }
 
