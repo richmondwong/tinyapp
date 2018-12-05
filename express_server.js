@@ -12,9 +12,9 @@ var urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-app.get(`/${generateRandomString()}`,(req, res) => {
-    return res.redirect(301, 'http://www.google.com' + req.originalURL)
-  })
+// app.get(`/${generateRandomString()}`,(req, res) => {
+//     return res.redirect(301, 'http://www.google.com' + req.originalURL)
+//   })
 
 app.get('/urls/new', (req, res) => {
   res.render('urls_new');
@@ -47,10 +47,13 @@ app.get('/hello', (req, res) => {
 
 app.post('/urls', (req, res) => {
   console.log(req.body);
-  res.send('Ok');
+  // res.send('Ok');
+  var randomValue = generateRandomString();
+  urlDatabase[randomValue] = req.body["longURL"]
+  res.redirect(`/urls/${randomValue}`)
 });
 
-function randomString() {
+function generateRandomString() {
   var allValues = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   var randomValue = ""
   console.log(allValues.length)
@@ -62,12 +65,11 @@ function randomString() {
     randomValue += selectedValue
     // console.log(selectedValue)
   }
-  urlDatabase[randomValue] = "http://www.test.com"
+
   return randomValue
 }
 
-randomString()
-
+generateRandomString()
 
 app.listen(PORT, () => {
    console.log(`Example app listening on port ${PORT}!`);
