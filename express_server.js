@@ -55,6 +55,11 @@ app.post('/urls', (req, res) => {
   res.redirect(`/urls/${randomValue}`)
 });
 
+app.post('/urls/:id/delete', (req, res) => {
+  delete urlDatabase[req.params.id];
+  res.redirect('/urls');
+});
+
 function generateRandomString() {
   var allValues = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   var randomValue = ""
@@ -66,11 +71,14 @@ function generateRandomString() {
   return randomValue
 }
 
-generateRandomString()
+// generateRandomString()
 
 app.listen(PORT, () => {
    console.log(`Example app listening on port ${PORT}!`);
 })
 
 
-
+//Index page original code
+ //  <% for (var i in urls){ %>
+// <li> <%= i %> <%= urls[i] %> </li>
+// <% } %>

@@ -10,11 +10,18 @@
 <ul>
 
 
-
-
 <% for (var i in urls){ %>
-<li> <%= i %> <%= urls[i] %> </li>
+<form method="POST" action="/urls/<%=i%>/delete">
+<li>
+<%= i %>
+-->
+<a href = "<%=urls[i]%>"> <%=urls[i] %> </a>
+</li>
+<button> DELETE </button>
 <% } %>
+
+
+</form>
 
 
 
@@ -22,3 +29,4 @@
 </ul>
 </body>
 </html>
+
