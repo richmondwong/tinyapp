@@ -9,7 +9,7 @@
 <body>
 <ul>
 
-
+<h1>
 <% for (var i in urls){ %>
 <form method="POST" action="/urls/<%=i%>/delete">
 <li>
@@ -18,11 +18,14 @@
 <a href = "<%=urls[i]%>"> <%=urls[i] %> </a>
 </li>
 <button> DELETE </button>
+<button> Edit </button>
+</form>
 <% } %>
 
 
-</form>
 
+
+</h1>
 
 
 <a href = '#'> URL Shortener </a>

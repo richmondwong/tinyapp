@@ -60,6 +60,13 @@ app.post('/urls/:id/delete', (req, res) => {
   res.redirect('/urls');
 });
 
+app.post('/urls/:id', (req, res) => {
+  console.log("REQ BODY:", req.body )
+  urlDatabase[req.params.id] = req.body.newLongURL
+  // res.render('the_template', { shortURL: req.body.newLongURL })
+  res.redirect('/urls');
+});
+
 function generateRandomString() {
   var allValues = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   var randomValue = ""
@@ -77,8 +84,3 @@ app.listen(PORT, () => {
    console.log(`Example app listening on port ${PORT}!`);
 })
 
-
-//Index page original code
- //  <% for (var i in urls){ %>
-// <li> <%= i %> <%= urls[i] %> </li>
-// <% } %>
