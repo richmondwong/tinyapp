@@ -51,6 +51,11 @@ app.get('/u/:shortURL', (req, res) => {
   res.redirect(urlDatabase[shortURL]);
 })
 
+app.post('/logout', (req, res) => {
+  res.clearCookie('username');
+  res.redirect('/urls')
+})
+
 app.post('/urls', (req, res) => {
   console.log(req.body);
   var randomValue = generateRandomString();
