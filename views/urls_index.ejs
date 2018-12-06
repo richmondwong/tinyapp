@@ -17,8 +17,8 @@
 <h1>
 
 
-<% for (var i in urls){ %>
-<form method="POST" action="/urls/<%=i%>/delete">
+<% for (var shortURL in urls){ %>
+<form method="POST" action="/urls/<%=shortURL%>/delete">
 
 <li>
 <%= shortURL %>
@@ -28,10 +28,14 @@
 <button> DELETE </button>
 </form>
 
+
+
 <form method="POST" action="/urls/<%= shortURL %>">
 <button> Edit </button>
 <input type="text" name="newLongURL">
 </form>
+
+<% } %>
 
 </h1>
 

@@ -14,6 +14,29 @@ var urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+const users = {
+    "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  },
+  "mikejones": {
+    id: "mikejones",
+    email: "mike@mike.com",
+    password: "mike123"
+  },
+  "bettychau": {
+    id: "bettychau",
+    email: "betty@betty.com",
+    password: "betty123"
+  }
+}
+
 app.get('/urls/new', (req, res) => {
   res.render('urls_new');
 });
@@ -51,6 +74,10 @@ app.get('/u/:shortURL', (req, res) => {
   res.redirect(urlDatabase[shortURL]);
 })
 
+app.get('/register', (req, res) => {
+  res.render('urls_register')
+})
+
 app.post('/logout', (req, res) => {
   res.clearCookie('username');
   res.redirect('/urls')
@@ -77,6 +104,27 @@ app.post('/urls/:id', (req, res) => {
 app.post("/login", (req, res) => {
    res.cookie('username', req.body.username);
    res.redirect('/urls');
+});
+
+app.post('/register', (req, res) => {
+
+  for (var userID in users){
+    if ( req.body["email"] === users[userID]["email"]){
+      res.status(400).send();
+    }
+  }
+
+  if (!req.body["email"] || !req.body["password"]){
+    res.status(400).send()
+  }
+
+  randomUserID = generateRandomString()
+  users[randomUserID] = {};
+  users[randomUserID]["ID"] = randomUserID;
+  users[randomUserID]["email"] = req.body["email"];
+  users[randomUserID]["password"] = req.body["password"];
+  console.log(users)
+  res.redirect('/urls');
 });
 
 function generateRandomString() {
