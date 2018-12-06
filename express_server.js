@@ -63,8 +63,13 @@ app.post('/urls/:id/delete', (req, res) => {
 app.post('/urls/:id', (req, res) => {
   console.log("REQ BODY:", req.body )
   urlDatabase[req.params.id] = req.body.newLongURL
-  // res.render('the_template', { shortURL: req.body.newLongURL })
   res.redirect('/urls');
+});
+
+
+app.post("/login", (req, res) => {
+   res.cookie('username', req.body.username);
+   res.redirect('/urls');
 });
 
 function generateRandomString() {
