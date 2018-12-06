@@ -6,12 +6,20 @@
 <head>
 <title> TinyApp </title>
 </head>
+
+<header>
+   <% include partials/_header %>
+ </header>
+
 <body>
 <ul>
 
 <h1>
-<% for (var shortURL in urls){ %>
-<form method="POST" action="/urls/<%=shortURL%>/delete">
+
+
+<% for (var i in urls){ %>
+<form method="POST" action="/urls/<%=i%>/delete">
+
 <li>
 <%= shortURL %>
 -->
@@ -25,11 +33,10 @@
 <input type="text" name="newLongURL">
 </form>
 
-<% } %>
-
-
-
 </h1>
+
+
+
 
 
 <a href = '#'> URL Shortener </a>
