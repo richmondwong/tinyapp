@@ -63,7 +63,6 @@ app.post('/urls/:id/delete', (req, res) => {
 app.post('/urls/:id', (req, res) => {
   console.log("REQ BODY:", req.body )
   urlDatabase[req.params.id] = req.body.newLongURL
-  // res.render('the_template', { shortURL: req.body.newLongURL })
   res.redirect('/urls');
 });
 
@@ -77,8 +76,6 @@ function generateRandomString() {
   }
   return randomValue
 }
-
-// generateRandomString()
 
 app.listen(PORT, () => {
    console.log(`Example app listening on port ${PORT}!`);

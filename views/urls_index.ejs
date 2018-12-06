@@ -10,18 +10,22 @@
 <ul>
 
 <h1>
-<% for (var i in urls){ %>
-<form method="POST" action="/urls/<%=i%>/delete">
+<% for (var shortURL in urls){ %>
+<form method="POST" action="/urls/<%=shortURL%>/delete">
 <li>
-<%= i %>
+<%= shortURL %>
 -->
-<a href = "<%=urls[i]%>"> <%=urls[i] %> </a>
+<a href = "<%=urls[shortURL]%>"> <%=urls[shortURL] %> </a>
 </li>
 <button> DELETE </button>
-<button> Edit </button>
 </form>
-<% } %>
 
+<form method="POST" action="/urls/<%= shortURL %>">
+<button> Edit </button>
+<input type="text" name="newLongURL">
+</form>
+
+<% } %>
 
 
 
