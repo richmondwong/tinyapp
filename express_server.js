@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 var PORT = 8080;
 var cookieParser = require('cookie-parser')
 
+const userIDCookie = "user_id"
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
@@ -50,10 +52,16 @@ app.get('/urls/:id', (req, res) => {
 })
 
 app.get('/urls' , (req, res) => {
+
   let templateVars = {
     urls: urlDatabase,
-    username: req.cookies['username']
+    username: users[req.cookies[userIDCookie]]["email"]
   }
+
+  // if (!req.cookies[userIDCookie]){
+  //   res.render('urls_index');
+  //   return
+  // }
   res.render('urls_index', templateVars)
 });
 
@@ -78,9 +86,15 @@ app.get('/register', (req, res) => {
   res.render('urls_register')
 })
 
+app.get('/login', (req, res) => {
+res.render('urls_login')
+})
+
 app.post('/logout', (req, res) => {
-  res.clearCookie('username');
-  res.redirect('/urls')
+  console.log("Clear Cookie: ", userIDCookie)
+  res.clearCookie(userIDCookie);
+  // res.redirect('/urls')
+  res.redirect('/login')
 })
 
 app.post('/urls', (req, res) => {
@@ -102,8 +116,23 @@ app.post('/urls/:id', (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-   res.cookie('username', req.body.username);
-   res.redirect('/urls');
+  for (var userAccount in users) {
+    if (req.body.username === users[userAccount]["email"]){
+        if (req.body.password === users[userAccount]["password"]){
+          console.log("req.body.password: ", req.body.password)
+          console.log("users[userAccount][password] ", users[userAccount]["password"])
+          console.log("users[userAccount][id]: ", users[userAccount]["id"])
+          res.cookie(userIDCookie, users[userAccount]["id"])
+          res.redirect('/urls');
+          }
+        else {
+          res.status(403).send()
+          }
+        return
+    }
+  }
+  console.log(users)
+   res.redirect('/login');
 });
 
 app.post('/register', (req, res) => {
@@ -124,6 +153,7 @@ app.post('/register', (req, res) => {
   users[randomUserID]["email"] = req.body["email"];
   users[randomUserID]["password"] = req.body["password"];
   console.log(users)
+  res.cookie(userIDCookie, randomUserID)
   res.redirect('/urls');
 });
 
