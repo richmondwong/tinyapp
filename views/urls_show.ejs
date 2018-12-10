@@ -10,28 +10,25 @@
 <body>
 <ul>
 
-<h1>
 
+Shareable Short URLS for Registered and Non-Registered Users
 
+<br><br>
   <form method="POST" action="/urls/<%=shortURL %>">
 
-<li> <%= shortURL %> : <%= longURL %></li>
+<li> <%= shortURL %> <%= longURL %></a></li>
 
 
-<button> Edit </button>
+<button> Confirm Edit </button>
 
-<input type="text" name="newLongURL">
+<input type="text" size="100" name="newLongURL" placeholder= "If you wish to change your http://yourURL.com to something else, type here and click Confirm Edit button">
 
   </form>
 
-
-
-</h1>
-
-
 <div></div>
 <div></div>
-<a href = '#'> URL Shortener </a>
+<!-- <a href = '#'> URL Shortener </a> -->
+<a href = '/urls'> Click here for URL Shortener Main Page (and your list of URLs!)</a>
 </ul>
 </body>
 </html>

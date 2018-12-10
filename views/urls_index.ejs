@@ -14,7 +14,6 @@
 <body>
 <ul>
 
-<h1>
 
 
 <% for (var shortURL in urls){ %>
@@ -22,28 +21,32 @@
 
 <li>
 <%= shortURL %>
--->
-<a href = "<%=urls[shortURL]%>"> <%=urls[shortURL] %> </a>
+:
+<a href = "<%=urls[shortURL]["longURL"]%>"> <%=urls[shortURL]["longURL"] %> </a>
 </li>
-<button> DELETE </button>
+<button> DELETE THIS </button>
 </form>
 
 
 
 <form method="POST" action="/urls/<%= shortURL %>">
-<button> Edit </button>
-<input type="text" name="newLongURL">
+
+
+<button> Confirm Edit </button>
+
+<input type="text" size="100" name="newLongURL" placeholder= "If you wish to change your http://yourURL.com to something else, type here and click Confirm Edit button">
+
 </form>
 
 <% } %>
 
-</h1>
 
 
 
 
-
-<a href = '#'> URL Shortener </a>
+<a href = '/urls/new'> Click here to add a new URL</a>
+<br>
+<a href = '/urls'> Click here for URL Shortener Main Page (and your list of URLs!)</a>
 </ul>
 </body>
 </html>
