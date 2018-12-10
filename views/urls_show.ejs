@@ -2,33 +2,22 @@
 <!-- views/partials/urls_show.ejs -->
 
 <html>
-<head>
-<title> TinyApp </title>
-</head>
-
-
+  <head>
+  <title> TinyApp </title>
+  </head>
 <body>
-<ul>
-
-
-Shareable Short URLS for Registered and Non-Registered Users
-
-<br><br>
+  <ul>
   <form method="POST" action="/urls/<%=shortURL %>">
-
-<li> <%= shortURL %> <%= longURL %></a></li>
-
-
-<button> Confirm Edit </button>
-
-<input type="text" size="100" name="newLongURL" placeholder= "If you wish to change your http://yourURL.com to something else, type here and click Confirm Edit button">
-
+    <h1>Shareable Short URLS!</h1>
+  <li> <b>Your shortURL:</b> <%= shortURL %>
+  <br>
+  <b>Corresponding longURL: </b> <%= longURL %></a></li>
+  <button> Confirm Edit </button>
+  <input type="text" size="100" name="newLongURL" placeholder= "If you wish to change your http://yourURL.com to something else, type here and click Confirm Edit button">
   </form>
-
 <div></div>
 <div></div>
-<!-- <a href = '#'> URL Shortener </a> -->
-<a href = '/urls'> Click here for URL Shortener Main Page (and your list of URLs!)</a>
+  <a href = '/urls'> Click here for URL Shortener Main Page (and your list of URLs!)</a>
 </ul>
 </body>
 </html>

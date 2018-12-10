@@ -14,15 +14,10 @@
 <form action="/register" method="POST" style="margin:30px;">
 <a href="/register">Register </a>
 </form>
-
-
 <% } else { %>
-
 <b> You are currently logged in as: </b>
   <%= username["email"] %>
  <form action="/logout" method="POST" style="margin:30px;">
 <button>LOGOUT</button>
  </form>
-
-
 <% } %>
