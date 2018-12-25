@@ -1,23 +1,23 @@
-
-<!-- views/partials/urls_show.ejs -->
-
-<html>
-  <head>
-  <title> TinyApp </title>
-  </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TinyApp</title>
+</head>
 <body>
-  <ul>
-  <form method="POST" action="/urls/<%=shortURL %>">
-    <h1>Shareable Short URLS!</h1>
-  <li> <b>Your shortURL:</b> <%= shortURL %>
-  <br>
-  <b>Corresponding longURL: </b> <%= longURL %></a></li>
-  <button> Confirm Edit </button>
-  <input type="text" size="100" name="newLongURL" placeholder= "If you wish to change your http://yourURL.com to something else, type here and click Confirm Edit button">
+
+  <header>
+  <% include partials/_header %>
+</header>
+
+    <!-- Add your EJS code here -->
+    <p>This is the urls_show ie. urls/:id page</p>
+    <p><%= shortURL %></p>
+    <p><%= longURL %></p>
+
+<form method="POST" action="/urls/<%=shortURL%>">
+   <input type="text" name="longURL">
+   <button>Edit longURL</button>
   </form>
-<div></div>
-<div></div>
-  <a href = '/urls'> Click here for URL Shortener Main Page (and your list of URLs!)</a>
-</ul>
+
 </body>
 </html>
