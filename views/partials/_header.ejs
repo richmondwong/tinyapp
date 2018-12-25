@@ -1,7 +1,7 @@
 <head>
 
-<% if (username) { %>
-<%= username %>
+<% if (user) { %>
+<%= user %>
 <form method="POST" action="/logout">
   <button type="submit" name="username_logout">Logout</button>
 </form>
@@ -10,6 +10,6 @@
   <input type="text" name="username">
   <button type="submit">Header Submit</button>
 </form>
-<%=username%>
+<%=user%>
 <% } %>
 </head>

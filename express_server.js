@@ -18,21 +18,47 @@ var urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-
+var users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  },
+ "mikejones": {
+    id: "mikejones",
+    email: "mike@mike.com",
+    password: "mike123"
+  },
+ "bettychau": {
+    id: "bettychau",
+    email: "betty@betty.com",
+    password: "betty123"
+  }
+}
 
 
 
 // GET REQUESTS
 app.get("/urls/new", (req, res) => {
-  var templateVars = { username: req.cookies["username"]}
+  // var templateVars = { username: req.cookies["username"]}
+  var templateVars = { user: users[req.cookies["user_id"]]}
+  // res.render("urls_new", templateVars)
   res.render("urls_new", templateVars)
 })
 
 app.get("/urls", (req, res) => {
   console.log("This is /urls req.cookies: ", req.cookies["username"])
   var templateVars = { urls: urlDatabase,
-                       username: req.cookies["username"]
+                      user: users[req.cookies["user_id"]]
+                       // username: req.cookies["username"]
                      }
+  // res.render("urls_index", templateVars)
+  console.log("This is templateVars after passing in user object: ", templateVars)
   res.render("urls_index", templateVars)
 })
 
@@ -41,8 +67,10 @@ app.get("/urls/:id", (req, res) => {
   // console.log(req.cookies("username"))
   let templateVars = { shortURL: req.params.id,
                        longURL: urlDatabase[req.params.id],
-                       username: req.cookies["username"]
+                       user: users[req.cookies["user_id"]]
+                       // username: req.cookies["username"]
                      };
+  // res.render("urls_show", templateVars);
   res.render("urls_show", templateVars);
 })
 
@@ -51,6 +79,20 @@ app.get("/u/:shortURL", (req, res) => {
   console.log(longURL)
   //Need something to handle http://
   res.redirect(longURL);
+})
+
+app.get("/register", (req, res) => {
+  var templateVars = { user: users[req.cookies["user_id"]]
+                       // username: req.cookies["username"]
+                      }
+  // res.render("urls_register", templateVars)
+  res.render("urls_register", templateVars)
+})
+
+
+app.get("/login", (req, res) => {
+
+  res.render("urls_login")
 })
 
 // POST REQUESTS
@@ -67,6 +109,7 @@ app.post("/urls/:id/delete", (req, res) => {
   console.log("This is before deletion: ", urlDatabase)
   delete urlDatabase[req.params.id]
   console.log("This is after deletion: ", urlDatabase)
+  console.log(req.cookies("username"))
   res.redirect("/urls")
 })
 
@@ -88,6 +131,24 @@ app.post("/login", (req, res) => {
 app.post("/logout", (req, res) => {
   res.clearCookie("username")
   res.redirect("/urls")
+})
+
+app.post("/register", (req, res) => {
+
+  if (!req.body.email || !req.body.password){
+    res.status(400).send()
+  } else {
+  var newlyRegisteredUserID = generateRandomString();
+  users[newlyRegisteredUserID] = {}
+  users[newlyRegisteredUserID]["id"] = newlyRegisteredUserID;
+  users[newlyRegisteredUserID]["email"] = req.body["email"];
+  users[newlyRegisteredUserID]["password"] = req.body["password"];
+  console.log("This is the newly added urlDatabase: ", users)
+
+  res.cookie("user_id", newlyRegisteredUserID);
+  res.redirect("/urls")
+  }
+
 })
 
 function generateRandomString() {
