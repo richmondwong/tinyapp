@@ -19,7 +19,11 @@ var urlDatabase = {
   "b2xVn2": {longURL: "http://www.lighthouselabs.ca", id: "userRandomID"},
   "9sm5xK": {longURL: "http://www.google.com", id: "mikejones"},
   "6AxK54": {longURL: "http://www.youtube.com", id: "bettychau"},
-  "ABCDEF": {longURL: "http://www.nytimes.com", id: "bettychau"}
+  "123456": {longURL: "http://www.espn.com", id: "mikejones"},
+  "654321": {longURL: "http://www.facebook.com", id: "mikejones"},
+  "999999": {longURL: "http://www.twitter.com", id: "mikejones"},
+  "111111": {longURL: "http://www.instagram.com", id: "rickwong"}
+
 };
 
 var users = {
@@ -42,6 +46,11 @@ var users = {
     id: "bettychau",
     email: "betty@betty.com",
     password: "betty123"
+  },
+  "rickwong": {
+    id: "rickwong",
+    email: "rick@rick.com",
+    password: "rick123"
   }
 }
 
@@ -62,29 +71,41 @@ app.get("/urls/new", (req, res) => {
 })
 
 app.get("/urls", (req, res) => {
-
-  urlsForUser(req.cookies["user_id"])
-  //Do not display index if not logged in.
+  if (!req.cookies["user_id"]){
+    //Do not display index if not logged in.
       // Instead, display message/prompt that they login/register first
-  // Filter list of URLs according to userID of cookie
-      // Filtering should happen before data sent to template
-  // This also. means /urls/:id should have message/prompt if (1.) user not logged in;
-  // or (2.) /:id does not belong to them
-
-  console.log("This is /urls req.cookies: ", req.cookies["username"])
-  var templateVars = { urls: urlDatabase,
+    res.send("<p>Please <a href='/login'>login</a> or <a href='/register'> register</a></p>")
+  }
+  else {
+    // Filter list of URLs according to userID of cookie
+    // Filtering should happen before data sent to template
+    var newlyFilteredList = urlsForUser(req.cookies["user_id"])
+    console.log("This is /urls req.cookies: ", req.cookies["username"])
+    var templateVars = { urls: newlyFilteredList,
+                      // urls: urlDatabase,
                       user: users[req.cookies["user_id"]]
                        // username: req.cookies["username"]
                      }
   // res.render("urls_index", templateVars)
-  console.log("This is templateVars after passing in user object: ", templateVars)
-  res.render("urls_index", templateVars)
+    console.log("This is templateVars after passing in user object: ", templateVars)
+    res.render("urls_index", templateVars)
+  }
+  // This also. means /urls/:id should have message/prompt if (1.) user not logged in;
+  // or (2.) /:id does not belong to them
 })
 
 
 app.get("/urls/:id", (req, res) => {
 
-  // console.log(req.cookies("username"))
+  console.log("This is req.cookies at /urls/:id ", req.cookies["user_id"])
+  console.log("This is req.params.id at /urls/:id", req.params.id)
+  console.log("This is urlDatabase[req.cookies[user_id]]: ", urlDatabase[req.cookies["user_id"]])
+
+  if (!req.cookies["user_id"] || req.cookies["user_id"] !== urlDatabase[req.params.id]["id"]){
+    res.send("<p>Cannot access as an unauthorized user. Please <a href='/login'>login</a> or <a href='/register'> register</a></p>")
+  }
+  else {
+    // console.log(req.cookies("username"))
   let templateVars = { shortURL: req.params.id,
                        longURL: urlDatabase[req.params.id]["longURL"],
                        user: users[req.cookies["user_id"]]
@@ -92,6 +113,7 @@ app.get("/urls/:id", (req, res) => {
                      };
   // res.render("urls_show", templateVars);
   res.render("urls_show", templateVars);
+  }
 })
 
 app.get("/u/:shortURL", (req, res) => {
