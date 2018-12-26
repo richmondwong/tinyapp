@@ -21,3 +21,25 @@
 <button>LOGOUT</button>
  </form>
 <% } %>
+
+
+
+
+//Redone version
+
+
+<head>
+
+<% if (user) { %>
+<%= user %>
+<form method="POST" action="/logout">
+  <button type="submit" name="username_logout">Logout</button>
+</form>
+<% } else { %>
+<form method="POST" action="/login">
+  <input type="text" name="username">
+  <button type="submit">Header Submit</button>
+</form>
+<%=user%>
+<% } %>
+</head>

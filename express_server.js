@@ -5,9 +5,6 @@ const bodyParser = require("body-parser");
 var cookieParser = require('cookie-parser')
 
 
-// const userIDCookie = "username"
-
-
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
@@ -91,7 +88,6 @@ app.get("/register", (req, res) => {
 
 
 app.get("/login", (req, res) => {
-
   res.render("urls_login")
 })
 
@@ -121,15 +117,36 @@ app.post("/urls/:id", (req, res) => {
 })
 
 app.post("/login", (req, res) => {
+  //Set 1:
   // console.log("This is the cookie: ", res.cookie())
-  console.log("This is req body: ", req.body["username"])
-  res.cookie("username", req.body["username"]);
   // console.log("This is username body: ", setCookie)
-  res.redirect("/urls")
+
+  //Set 2:
+  // console.log("This is req body: ", req.body["username"])
+  // res.cookie("username", req.body["username"]);
+  // res.redirect("/urls")
+  console.log("This is /login req.body[email]: ", req.body["email"])
+  console.log("This is /login req.body[password]: ", req.body["password"])
+
+  for (var i in users) {
+    if (req.body.email === users[i]["email"]){
+        if (req.body.password === users[i]["password"]){
+          res.cookie("user_id", users[i]["id"])
+          res.redirect('/urls');
+          }
+        else {
+          res.status(403).send()
+          }
+        return
+    }
+  }
+
+
 })
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("username")
+  // res.clearCookie("username")
+  res.clearCookie("user_id")
   res.redirect("/urls")
 })
 
