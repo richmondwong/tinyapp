@@ -58,20 +58,20 @@ var users = {
 
 // GET REQUESTS
 app.get("/urls/new", (req, res) => {
-  if (!req.session.user_id){
+  if (!req.cookies["user_id"]){
     res.redirect("/login")
   }
   else {
   // if (req.cookies["user_id"]){}
   // var templateVars = { username: req.cookies["username"]}
-  var templateVars = { user: users[req.session.user_id]}
+  var templateVars = { user: users[req.cookies["user_id"]]}
   // res.render("urls_new", templateVars)
   res.render("urls_new", templateVars)
   }
 })
 
 app.get("/urls", (req, res) => {
-  if (!req.session.user_id){
+  if (!req.cookies["user_id"]){
     //Do not display index if not logged in.
       // Instead, display message/prompt that they login/register first
     res.send("<p>Please <a href='/login'>login</a> or <a href='/register'> register</a></p>")
@@ -79,11 +79,11 @@ app.get("/urls", (req, res) => {
   else {
     // Filter list of URLs according to userID of cookie
     // Filtering should happen before data sent to template
-    var newlyFilteredList = urlsForUser(req.session.user_id)
+    var newlyFilteredList = urlsForUser(req.cookies["user_id"])
     console.log("This is /urls req.cookies: ", req.cookies["username"])
     var templateVars = { urls: newlyFilteredList,
                       // urls: urlDatabase,
-                      user: users[req.session.user_id]
+                      user: users[req.cookies["user_id"]]
                        // username: req.cookies["username"]
                      }
   // res.render("urls_index", templateVars)
@@ -97,14 +97,18 @@ app.get("/urls", (req, res) => {
 
 app.get("/urls/:id", (req, res) => {
 
-  if (!req.session.user_id || req.session.user_id !== urlDatabase[req.params.id]["id"]){
+  console.log("This is req.cookies at /urls/:id ", req.cookies["user_id"])
+  console.log("This is req.params.id at /urls/:id", req.params.id)
+  console.log("This is urlDatabase[req.cookies[user_id]]: ", urlDatabase[req.cookies["user_id"]])
+
+  if (!req.cookies["user_id"] || req.cookies["user_id"] !== urlDatabase[req.params.id]["id"]){
     res.send("<p>Cannot access as an unauthorized user. Please <a href='/login'>login</a> or <a href='/register'> register</a></p>")
   }
   else {
     // console.log(req.cookies("username"))
   let templateVars = { shortURL: req.params.id,
                        longURL: urlDatabase[req.params.id]["longURL"],
-                       user: users[req.session.user_id]
+                       user: users[req.cookies["user_id"]]
                        // username: req.cookies["username"]
                      };
   // res.render("urls_show", templateVars);
@@ -121,7 +125,7 @@ app.get("/u/:shortURL", (req, res) => {
 })
 
 app.get("/register", (req, res) => {
-  var templateVars = { user: users[req.session.user_id]
+  var templateVars = { user: users[req.cookies["user_id"]]
                        // username: req.cookies["username"]
                       }
   // res.render("urls_register", templateVars)
@@ -139,11 +143,10 @@ app.post("/urls", (req, res) => {
   var randomValue = generateRandomString();
   urlDatabase[randomValue] = {};
   urlDatabase[randomValue]["longURL"] = req.body["longURL"];
-  urlDatabase[randomValue]["id"] = req.session.user_id
+  urlDatabase[randomValue]["id"] = req.cookies["user_id"]
   // urlDatabase[randomValue] = req.body["longURL"]
   console.log(urlDatabase)
-  // res.redirect(`/urls/${randomValue}`)
-  res.redirect("/urls")
+  res.redirect(`/urls/${randomValue}`)
 })
 
 app.post("/urls/:id/delete", (req, res) => {
@@ -157,7 +160,7 @@ app.post("/urls/:id/delete", (req, res) => {
   //   }
   // }
 
-  if (urlDatabase[req.params.id]["id"] === req.session.user_id){
+  if (urlDatabase[req.params.id]["id"] === req.cookies["user_id"]){
     delete urlDatabase[req.params.id]
     res.redirect("/urls")
   }
@@ -180,7 +183,7 @@ app.post("/urls/:id", (req, res) => {
   console.log("This is a test of the editing system")
   console.log(req.body["longURL"])
 
-  if (urlDatabase[req.params.id]["id"] === req.session.user_id){
+  if (urlDatabase[req.params.id]["id"] === req.cookies["user_id"]){
     urlDatabase[req.params.id]["longURL"] = req.body["longURL"]
     res.redirect("/urls")
   }
@@ -222,8 +225,7 @@ app.post("/login", (req, res) => {
 
 app.post("/logout", (req, res) => {
   // res.clearCookie("username")
-  // res.clearCookie("user_id")
-  req.session = null;
+  res.clearCookie("user_id")
   res.redirect("/urls")
 })
 
