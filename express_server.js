@@ -3,7 +3,7 @@ var app = express();
 var PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
 var cookieParser = require('cookie-parser')
-
+const bcrypt = require('bcrypt');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
@@ -30,27 +30,27 @@ var users = {
   "userRandomID": {
     id: "userRandomID",
     email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    password: bcrypt.hashSync("purple-monkey-dinosaur", 10)
   },
  "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
-    password: "dishwasher-funk"
+    password: bcrypt.hashSync("dishwasher-funk", 10)
   },
  "mikejones": {
     id: "mikejones",
     email: "mike@mike.com",
-    password: "mike123"
+    password: bcrypt.hashSync("mike123", 10)
   },
  "bettychau": {
     id: "bettychau",
     email: "betty@betty.com",
-    password: "betty123"
+    password: bcrypt.hashSync("betty123", 10)
   },
   "rickwong": {
     id: "rickwong",
     email: "rick@rick.com",
-    password: "rick123"
+    password: bcrypt.hashSync("rick123", 10)
   }
 }
 
@@ -207,7 +207,8 @@ app.post("/login", (req, res) => {
 
   for (var i in users) {
     if (req.body.email === users[i]["email"]){
-        if (req.body.password === users[i]["password"]){
+        // if (req.body.password === users[i]["password"]){
+        if (bcrypt.compareSync(req.body.password, users[i]["password"])){
           res.cookie("user_id", users[i]["id"])
           res.redirect('/urls');
           }
@@ -236,7 +237,9 @@ app.post("/register", (req, res) => {
   users[newlyRegisteredUserID] = {}
   users[newlyRegisteredUserID]["id"] = newlyRegisteredUserID;
   users[newlyRegisteredUserID]["email"] = req.body["email"];
-  users[newlyRegisteredUserID]["password"] = req.body["password"];
+  // users[newlyRegisteredUserID]["password"] = req.body["password"];
+  var password = req.body["password"]
+  users[newlyRegisteredUserID]["password"] = bcrypt.hashSync(password, 10)
   console.log("This is the newly added urlDatabase: ", users)
 
   res.cookie("user_id", newlyRegisteredUserID);
