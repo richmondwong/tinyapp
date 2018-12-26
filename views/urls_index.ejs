@@ -8,24 +8,22 @@
   <header>
   <% include partials/_header %>
 </header>
-
-    <!-- Add your EJS code here -->
-
+<h3>Your full list of URLs</h3>
     <% for (var shortURL in urls) { %>
-   <p> <%= shortURL %> </p>
-   <a href="<%=urls[shortURL]["longURL"]%>"><%=urls[shortURL]["longURL"]%></a>
-
-  <form method="POST" action="/urls/<%= shortURL %>/delete">
+    <br>
+   <span><b>URL:</b> <%= shortURL %>:::
+   <a href="<%=urls[shortURL]["longURL"]%>"><%=urls[shortURL]["longURL"]%></a>:::  <a href="/urls/<%=shortURL%>">Edit</a>
+   <form method="POST" action="/urls/<%= shortURL %>/delete">
    <button>Delete</button>
   </form>
-
-  <a href="/urls/<%=shortURL%>">Edit</a>
+  </span>
+  <br>
  <% } %>
 
  <br>
  <br>
 
-<a href="/urls/new">Add new longURL</a>
+<a href="/urls/new">Add new URL to this list</a>
 
 </body>
 </html>
