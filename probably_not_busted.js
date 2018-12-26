@@ -258,38 +258,15 @@ app.post("/logout", (req, res) => {
   res.redirect("/urls")
 })
 
-app.post("/register", (req, res) => {
-
-  for (var i in users){
-    // console.log("This is inside the post register loop: ", i)
-    // // console.log(users[i])
-    // console.log("This is the email address ", users[i]["email"])
-    if (users[i]["email"] === req.body.email){
-      res.status(404).send("User already exists in our database")
-    }
-  }
-
-  if (!req.body.email || !req.body.password){
-    res.status(400).send("Email and Password Fields cannot be blank")
-  } else {
-  var newlyRegisteredUserID = generateRandomString();
-  users[newlyRegisteredUserID] = {}
-  users[newlyRegisteredUserID]["id"] = newlyRegisteredUserID;
-  users[newlyRegisteredUserID]["email"] = req.body["email"];
-  // users[newlyRegisteredUserID]["password"] = req.body["password"];
-  var password = req.body["password"]
-  users[newlyRegisteredUserID]["password"] = bcrypt.hashSync(password, 10)
-  console.log("This is the newly added urlDatabase: ", users)
-
-  // res.cookie("user_id", newlyRegisteredUserID);
-  req.session.user_id = newlyRegisteredUserID;
-  res.redirect("/urls")
-  }
-
-});
-
-
 // app.post("/register", (req, res) => {
+
+//   for (var i in users){
+//     console.log("This is inside the post register loop: ", i)
+//     // console.log(users[i])
+//     console.log("This is the email address ", users[i]["email"])
+//     // if (users[i]["email"] === req.body.password){
+//     //   res.send("User already exists in our database")
+//     }
 
 //   if (!req.body.email || !req.body.password){
 //     res.status(400).send("Email and Password Fields cannot be blank")
@@ -308,7 +285,29 @@ app.post("/register", (req, res) => {
 //   res.redirect("/urls")
 //   }
 
-// })
+// });
+
+
+app.post("/register", (req, res) => {
+
+  if (!req.body.email || !req.body.password){
+    res.status(400).send("Email and Password Fields cannot be blank")
+  } else {
+  var newlyRegisteredUserID = generateRandomString();
+  users[newlyRegisteredUserID] = {}
+  users[newlyRegisteredUserID]["id"] = newlyRegisteredUserID;
+  users[newlyRegisteredUserID]["email"] = req.body["email"];
+  // users[newlyRegisteredUserID]["password"] = req.body["password"];
+  var password = req.body["password"]
+  users[newlyRegisteredUserID]["password"] = bcrypt.hashSync(password, 10)
+  console.log("This is the newly added urlDatabase: ", users)
+
+  // res.cookie("user_id", newlyRegisteredUserID);
+  req.session.user_id = newlyRegisteredUserID;
+  res.redirect("/urls")
+  }
+
+})
 
 
 function generateRandomString() {
