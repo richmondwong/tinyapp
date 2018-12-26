@@ -137,11 +137,17 @@ app.get("/u/:shortURL", (req, res) => {
 })
 
 app.get("/register", (req, res) => {
+
+  if (req.session.user_id){
+    res.redirect("/urls")
+  }
+  else {
   var templateVars = { user: users[req.session.user_id]
                        // username: req.cookies["username"]
                       }
   // res.render("urls_register", templateVars)
   res.render("urls_register", templateVars)
+  }
 })
 
 
@@ -255,7 +261,7 @@ app.post("/logout", (req, res) => {
 app.post("/register", (req, res) => {
 
   if (!req.body.email || !req.body.password){
-    res.status(400).send()
+    res.status(400).send("Email and Password Fields cannot be blank")
   } else {
   var newlyRegisteredUserID = generateRandomString();
   users[newlyRegisteredUserID] = {}
