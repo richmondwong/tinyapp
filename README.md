@@ -4,8 +4,11 @@ TinyApp is a full stack web app built with Node and Express that lets users shor
 
 ## Screenshots
 
+A full list of URLs for a logged in user. Includes shortURL and longURL as well as functionality to edit and delete the URLs.
 !["Screenshot of urls page"](https://github.com/richmondwong/tinyapp/blob/master/docs/urls.png)
-!["Screenshot of URL edit page"](https://github.com/richmondwong/tinyapp/blob/master/docs/urls.png)
+
+Screenshot showing the URL edit functionality.
+!["Screenshot of URL edit page"](https://github.com/richmondwong/tinyapp/blob/master/docs/edit_url.png)
 ## Dependencies
 
 - Node.js
