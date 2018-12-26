@@ -106,7 +106,7 @@ app.get("/urls/:id", (req, res) => {
     res.send("<p>This shortURL does not exist. Return to the <a href='/urls'>main page</a></p>")
   }
   else if (!req.session.user_id || req.session.user_id !== urlDatabase[req.params.id]["id"]){
-    res.send("<p><h3>Cannot access a URL that does not belong to you.</h3> <br> Please <a href='/login'>login</a> using correct credentials to view that account's full list of URLs. You may also create a new account by <a href='/register'> registering</a>.<br><br>Please note that certain features (including viewing a user's full list of URLs and editing shortURLs can <b><i>only</i></b> be accessed by each account's respective authorized user.</p>")
+    res.send("<p><h3>Cannot access a URL that does not belong to you.</h3> <br> Please <a href='/login'>login</a> using correct credentials to view that specific account's full list of URLs. You may also create a new account by <a href='/register'> registering</a> (if you are already logged in, this will take you directly to your list of URLs.<br><br>Please note that certain features (including viewing a user's full list of URLs and editing shortURLs can <b><i>only</i></b> be accessed by each account's respective authorized user.</p>")
   }
   else {
     let templateVars = { shortURL: req.params.id,
