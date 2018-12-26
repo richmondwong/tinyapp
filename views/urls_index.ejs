@@ -4,17 +4,16 @@
   <title>TinyApp</title>
 </head>
 <body>
-
   <header>
   <% include partials/_header %>
-</header>
-<h3>Your full list of URLs</h3>
-    <% for (var shortURL in urls) { %>
-    <br>
-   <span><b>URL:</b> <%= shortURL %>:::
-   <a href="<%=urls[shortURL]["longURL"]%>"><%=urls[shortURL]["longURL"]%></a>:::  <a href="/urls/<%=shortURL%>">Edit</a>
-   <form method="POST" action="/urls/<%= shortURL %>/delete">
-   <button>Delete</button>
+  </header>
+  <h3>Your full list of URLs</h3>
+  <% for (var shortURL in urls) { %>
+  <br>
+  <span><b>URL:</b> <%= shortURL %> </a>:::
+  <a href="<%=urls[shortURL]["longURL"]%>"><%=urls[shortURL]["longURL"]%></a>:::  <a href="/urls/<%=shortURL%>">Edit</a>
+  <form method="POST" action="/urls/<%= shortURL %>/delete">
+  <button>Delete</button>
   </form>
   </span>
   <br>
@@ -23,7 +22,13 @@
  <br>
  <br>
 
-<a href="/urls/new">Add new URL to this list</a>
+  <center>
+    <a href="/urls/new">Add new URL to this list</a>
+    <p>To share links, send the shortURLs using <i>slash-u-slash</i> followed by the relevant 6-digit alphanumeric code, i.e.:
+    <br>
+    <br>
+    <b> /u/<i><6-digit alphanumeric code></b></i></p></6-digit>
+<center>
 
 </body>
 </html>

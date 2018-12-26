@@ -2,12 +2,10 @@ var express = require("express");
 var app = express();
 var PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
-var cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 var cookieSession = require('cookie-session');
 
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
 app.use(cookieSession({
   name: 'session',
   keys: ['whaddup_bro'],
@@ -15,6 +13,27 @@ app.use(cookieSession({
 }))
 
 app.set("view engine", "ejs");
+
+function generateRandomString() {
+  var allValues = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  var randomValue = ""
+  for (var i = 6; i > 0; i--){
+    var numberPicker = Math.floor(Math.random() * allValues.length)
+    var selectedValue = allValues.substring(numberPicker, numberPicker + 1).toString()
+    randomValue += selectedValue
+  }
+  return randomValue
+}
+
+function urlsForUser(id){
+  var urlDatabaseFiltered = {};
+  for (var i in urlDatabase){
+    if (id === urlDatabase[i]["id"]){
+      urlDatabaseFiltered[i] = urlDatabase[i]
+    }
+  }
+  return urlDatabaseFiltered
+}
 
 var urlDatabase = {
   "b2xVn2": {longURL: "http://www.lighthouselabs.ca", id: "userRandomID"},
@@ -54,9 +73,7 @@ var users = {
   }
 }
 
-
-
-// GET REQUESTS
+// New URL creation page. Only allows in newly registered or existing users (ie. those with a cookie)
 app.get("/urls/new", (req, res) => {
   if (!req.session.user_id){
     res.redirect("/login")
@@ -67,6 +84,8 @@ app.get("/urls/new", (req, res) => {
   }
 })
 
+// Displays list of all URLs created by user. Only allows access to those with a cookie (Ie. newly
+// registered users or those in the existing user database)
 app.get("/urls", (req, res) => {
   if (!req.session.user_id){
     res.send("<p>Please <a href='/login'>login</a> or <a href='/register'> register</a> to use TinyApp!</p>")
@@ -80,7 +99,7 @@ app.get("/urls", (req, res) => {
   }
 })
 
-
+//Individual ShortURL page. Allows user to change the longURL and accordingly updates urlDatabase.
 app.get("/urls/:id", (req, res) => {
   if (urlDatabase[req.params.id] === undefined){
     res.send("<p>This shortURL does not exist. Return to the <a href='/urls'>main page</a></p>")
@@ -107,8 +126,8 @@ app.get("/u/:shortURL", (req, res) => {
   }
 })
 
+// Registration page
 app.get("/register", (req, res) => {
-
   if (req.session.user_id){
     res.redirect("/urls")
   }
@@ -118,6 +137,7 @@ app.get("/register", (req, res) => {
   }
 })
 
+//Login PAge
 app.get("/login", (req, res) => {
   res.render("urls_login")
 })
@@ -131,8 +151,8 @@ app.get("/", (req, res) => {
   }
 })
 
-// POST REQUESTS
-
+// List of all URLs. This assigns what is typed as the longURL as a random variable (then stored as a key in the urlDatabase object), and which is saved in the
+//urlDatabase. Pulls in data from entry form in urls_new.ejs
 app.post("/urls", (req, res) => {
   var randomValue = generateRandomString();
   urlDatabase[randomValue] = {};
@@ -161,8 +181,9 @@ app.post("/urls/:id", (req, res) => {
   }
 })
 
+// Logs an existing user into system. Searches through existing entries in user database
+// to see if he/she is an existing user, then displays 403 if not an existing user.
 app.post("/login", (req, res) => {
-
   for (var i in users) {
     if (req.body.email === users[i]["email"]){
         if (bcrypt.compareSync(req.body.password, users[i]["password"])){
@@ -175,23 +196,22 @@ app.post("/login", (req, res) => {
         return
     }
   }
-
-
 })
 
+// Logs user out and clears their cookie
 app.post("/logout", (req, res) => {
   req.session = null;
   res.redirect("/urls")
 })
 
+// Registers and adds a user to users database. Prevents duplicate users from being created.
+// Also prevents account creation without them having also created a password
 app.post("/register", (req, res) => {
-
   for (var i in users){
     if (users[i]["email"] === req.body.email){
       res.status(404).send("User already exists in our database")
     }
   }
-
   if (!req.body.email || !req.body.password){
     res.status(400).send("Email and Password Fields cannot be blank")
   } else {
@@ -204,36 +224,8 @@ app.post("/register", (req, res) => {
   req.session.user_id = newlyRegisteredUserID;
   res.redirect("/urls")
   }
-
 });
-
-
-function generateRandomString() {
-  var allValues = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  var randomValue = ""
-  for (var i = 6; i > 0; i--){
-    var numberPicker = Math.floor(Math.random() * allValues.length)
-    var selectedValue = allValues.substring(numberPicker, numberPicker + 1).toString()
-    randomValue += selectedValue
-  }
-  return randomValue
-}
-
-
-function urlsForUser(id){
-
-  var urlDatabaseFiltered = {};
-
-  for (var i in urlDatabase){
-    if (id === urlDatabase[i]["id"]){
-      urlDatabaseFiltered[i] = urlDatabase[i]
-    }
-  }
-  return urlDatabaseFiltered
-}
-
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
-
