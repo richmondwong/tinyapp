@@ -1,0 +1,135 @@
+header.ejs
+======
+<head>
+
+<% if (user) { %>
+<p> Logged in as: <%= user["email"] %> </p>
+<form method="POST" action="/logout">
+  <button type="submit" name="username_logout">Logout</button>
+</form>
+<% } else { %>
+
+<a href="/register">Register</a>
+<a href="/login">Login</a>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%=user%>
+<% } %>
+
+
+
+
+urls_index
+=====
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TinyApp</title>
+</head>
+<body>
+
+  <header>
+  <% include partials/_header %>
+</header>
+
+    <!-- Add your EJS code here -->
+
+    <% for (var shortURL in urls) { %>
+   <p> <%= shortURL %> </p>
+   <a href="<%=urls[shortURL]%>"><%=urls[shortURL]%></a>
+
+  <form method="POST" action="/urls/<%= shortURL %>/delete">
+   <button>Delete</button>
+  </form>
+
+  <a href="/urls/<%=shortURL%>">Edit</a>
+ <% } %>
+
+
+
+</body>
+</html>
+
+
+urls_new
+=======
+<!DOCTYPE html>
+<html lang="en">
+  <head></head>
+  <body style="font-size:20px; padding:50px;">
+    <% include partials/_header %>
+    <form action="/urls" method="POST" style="margin:150px;">
+      <label for="longURL">Enter a URL:</label>
+      <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>
+
+
+urls_show
+=========
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TinyApp</title>
+</head>
+<body>
+
+  <header>
+  <% include partials/_header %>
+</header>
+
+    <!-- Add your EJS code here -->
+    <p>This is the urls_show ie. urls/:id page</p>
+    <p><%= shortURL %></p>
+    <p><%= longURL %></p>
+
+<form method="POST" action="/urls/<%=shortURL%>">
+   <input type="text" name="longURL">
+   <button>Edit longURL</button>
+  </form>
+
+</body>
+</html>
+
+urls_login
+========
+
+<form method="POST" action="/login">
+  <input type="text" name="email" placeholder="email">
+  <br>
+  <input type="text" name="password" placeholder="password">
+  <button type="submit">Header Submit</button>
+</form>
+
+
+urls_register
+========
+<!DOCTYPE html>
+<html lang="en">
+  <head></head>
+  <body style="font-size:20px; padding:50px;">
+    <% include partials/_header %>
+    <form action="/register" method="POST" style="margin:150px;">
+      <label>Enter Email:</label>
+      <input type="email" name="email" placeholder="Email address" style="width: 300px">
+      <br>
+      <label>Enter Password:</label>
+      <input type="password" name="password" placeholder="Password" style="width: 300px">
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>

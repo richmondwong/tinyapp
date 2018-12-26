@@ -13,7 +13,7 @@
 
     <% for (var shortURL in urls) { %>
    <p> <%= shortURL %> </p>
-   <a href="<%=urls[shortURL]%>"><%=urls[shortURL]%></a>
+   <a href="<%=urls[shortURL]["longURL"]%>"><%=urls[shortURL]["longURL"]%></a>
 
   <form method="POST" action="/urls/<%= shortURL %>/delete">
    <button>Delete</button>
