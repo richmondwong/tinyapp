@@ -279,6 +279,29 @@ app.post("/register", (req, res) => {
 
 })
 
+
+// app.post("/register", (req, res) => {
+
+//   if (!req.body.email || !req.body.password){
+//     res.status(400).send("Email and Password Fields cannot be blank")
+//   } else {
+//   var newlyRegisteredUserID = generateRandomString();
+//   users[newlyRegisteredUserID] = {}
+//   users[newlyRegisteredUserID]["id"] = newlyRegisteredUserID;
+//   users[newlyRegisteredUserID]["email"] = req.body["email"];
+//   // users[newlyRegisteredUserID]["password"] = req.body["password"];
+//   var password = req.body["password"]
+//   users[newlyRegisteredUserID]["password"] = bcrypt.hashSync(password, 10)
+//   console.log("This is the newly added urlDatabase: ", users)
+
+//   // res.cookie("user_id", newlyRegisteredUserID);
+//   req.session.user_id = newlyRegisteredUserID;
+//   res.redirect("/urls")
+//   }
+
+// })
+
+
 function generateRandomString() {
   var allValues = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   var randomValue = ""
