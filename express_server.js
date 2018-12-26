@@ -74,7 +74,7 @@ app.get("/urls", (req, res) => {
   if (!req.session.user_id){
     //Do not display index if not logged in.
       // Instead, display message/prompt that they login/register first
-    res.send("<p>Please <a href='/login'>login</a> or <a href='/register'> register</a></p>")
+    res.send("<p>Please <a href='/login'>login</a> or <a href='/register'> register</a> to use TinyApp!</p>")
   }
   else {
     // Filter list of URLs according to userID of cookie
@@ -97,8 +97,11 @@ app.get("/urls", (req, res) => {
 
 app.get("/urls/:id", (req, res) => {
 
-  if (!req.session.user_id || req.session.user_id !== urlDatabase[req.params.id]["id"]){
-    res.send("<p>Cannot access as an unauthorized user. Please <a href='/login'>login</a> or <a href='/register'> register</a></p>")
+  if (urlDatabase[req.params.id] === undefined){
+    res.send("<p>This shortURL does not exist. Return to the <a href='/urls'>main page</a></p>")
+  }
+  else if (!req.session.user_id || req.session.user_id !== urlDatabase[req.params.id]["id"]){
+    res.send("<p><h3>Cannot access a URL that does not belong to you.</h3> <br> Please <a href='/login'>login</a> using correct credentials to view that account's full list of URLs. You may also create a new account by <a href='/register'> registering</a>.<br><br>Please note that certain features (including viewing a user's full list of URLs and editing shortURLs can <b><i>only</i></b> be accessed by each account's respective authorized user.</p>")
   }
   else {
     // console.log(req.cookies("username"))
@@ -114,10 +117,23 @@ app.get("/urls/:id", (req, res) => {
 
 app.get("/u/:shortURL", (req, res) => {
   // let longURL = urlDatabase[req.params.shortURL]
+
+  if (urlDatabase[req.params.shortURL] === undefined){
+    res.send("<p>That shortURL does not exist</p>")
+  }
+  else {
   let longURL = urlDatabase[req.params.shortURL]["longURL"]
+
+  // if (longUrl.substring(0,7) !== "http://"){
+  //   var prefix = "http://";
+  //   var properURL = prefix.concat(longURL)
+  //   res.redirect(properURL)
+  // }
+  // else { }
   console.log(longURL)
   //Need something to handle http://
   res.redirect(longURL);
+  }
 })
 
 app.get("/register", (req, res) => {
@@ -131,6 +147,15 @@ app.get("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
   res.render("urls_login")
+})
+
+app.get("/", (req, res) => {
+  if (req.session.user_id){
+    res.redirect("/urls")
+  }
+  else {
+    res.redirect("/login")
+  }
 })
 
 // POST REQUESTS

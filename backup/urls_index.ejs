@@ -29,3 +29,29 @@
 </body>
 </html>
 
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TinyApp</title>
+</head>
+<body>
+
+  <header>
+  <% include partials/_header %>
+</header>
+
+    <!-- Add your EJS code here -->
+    <p>This is the urls_show ie. urls/:id page</p>
+    <p><%= shortURL %></p>
+    <p><%= longURL %></p>
+
+<form method="POST" action="/urls/<%=shortURL%>">
+   <input type="text" name="longURL">
+   <button>Edit longURL</button>
+  </form>
+
+</body>
+</html>
