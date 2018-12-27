@@ -1,8 +1,8 @@
 var express = require("express");
 var app = express();
 var PORT = 8080; // default port 8080
-const bodyParser = require("body-parser");
-const bcrypt = require('bcrypt');
+var bodyParser = require("body-parser");
+var bcrypt = require('bcrypt');
 var cookieSession = require('cookie-session');
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -109,7 +109,7 @@ app.get("/urls/:id", (req, res) => {
     res.send("<p><h3>Cannot access a URL that does not belong to you.</h3> <br> Please <a href='/login'>login</a> using correct credentials to view that specific account's full list of URLs. You may also create a new account by <a href='/register'> registering</a> (if you are already logged in, this will take you directly to your list of URLs.<br><br>Please note that certain features (including viewing a user's full list of URLs and editing shortURLs can <b><i>only</i></b> be accessed by each account's respective authorized user.</p>");
   }
   else {
-    let templateVars = { shortURL: req.params.id,
+    var templateVars = { shortURL: req.params.id,
                        longURL: urlDatabase[req.params.id]["longURL"],
                        user: users[req.session.user_id]
                      };
@@ -122,7 +122,7 @@ app.get("/u/:shortURL", (req, res) => {
     res.send("<p>That shortURL does not exist</p>");
   }
   else {
-  let longURL = urlDatabase[req.params.shortURL]["longURL"];
+  var longURL = urlDatabase[req.params.shortURL]["longURL"];
   res.redirect(longURL);
   }
 });
